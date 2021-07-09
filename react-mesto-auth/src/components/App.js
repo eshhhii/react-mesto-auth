@@ -1,8 +1,11 @@
 import React from "react";
+import { Route, Switch } from "react-router-dom";
 import api from "../utils/api.js";
 import Header from "./Header.js";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
+import Register from "./Register.js";
+import Login from "./Login.js";
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
 import EditProfilePopup from "./EditProfilePopup.js";
@@ -128,16 +131,26 @@ function App() {
       <div className="body">
         <div className="page">
           <Header />
-          <Main
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            cards={cards}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handCardDelete}
-          />
-          <Footer />
+          <Switch>
+            <Route path="/sign-in">
+              <Login />
+            </Route>
+            <Route path="/sign-up">
+              <Register />
+            </Route>
+            <ProtectedRoute path="/" />
+
+            <Main
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              cards={cards}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handCardDelete}
+            />
+            <Footer />
+          </Switch>
         </div>
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
