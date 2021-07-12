@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import api from "../utils/api.js";
 import Header from "./Header.js";
 import Main from "./Main.js";
@@ -22,6 +22,7 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
+  const [loggedIn, setLiggedIn] = React.useState(false);
 
   React.useEffect(() => {
     api
@@ -138,7 +139,6 @@ function App() {
             <Route path="/sign-up">
               <Register />
             </Route>
-            <ProtectedRoute path="/" />
 
             <Main
               onEditProfile={handleEditProfileClick}

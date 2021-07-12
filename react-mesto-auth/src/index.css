@@ -47,3 +47,9 @@
 @import url(./blocks/popup/__image/popup__image.css);
 @import url(./blocks/popup/__title/_image/popup__title_image.css);
 @import url(./blocks/popup/__title/_delete/popup__title_delete.css);
+@import url(./blocks/sign/sign.css);
+@import url(./blocks/sign/__title/sign__title.css);
+@import url(./blocks/sign/__form/sign__form.css);
+@import url(./blocks/sign/__input/sign__input.css);
+@import url(./blocks/sign/__button/sign__button.css);
+@import url(./blocks/sign/__subtitle/sign__subtitle.css);
