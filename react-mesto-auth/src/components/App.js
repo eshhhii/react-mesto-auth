@@ -11,6 +11,7 @@ import ImagePopup from "./ImagePopup.js";
 import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
+import ProtectedRoute from "./ProtectedRoute.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
 function App() {
@@ -139,8 +140,10 @@ function App() {
             <Route path="/sign-up">
               <Register />
             </Route>
-
-            <Main
+            <ProtectedRoute
+              path="/"
+              loggedIn={loggedIn}
+              component={Main}
               onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
               onEditAvatar={handleEditAvatarClick}
