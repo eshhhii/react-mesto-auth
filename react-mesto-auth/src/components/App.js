@@ -12,6 +12,7 @@ import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
 import ProtectedRoute from "./ProtectedRoute.js";
+import InfoTooltip from "./InfoTooltip.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
-  const [loggedIn, setLiggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
     api
@@ -132,7 +133,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="body">
         <div className="page">
-          <Header />
+          <Header loggedIn={loggedIn} />
           <Switch>
             <Route path="/sign-in">
               <Login />
@@ -152,6 +153,9 @@ function App() {
               onCardLike={handleCardLike}
               onCardDelete={handCardDelete}
             />
+            <Route>
+              {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+            </Route>
             <Footer />
           </Switch>
         </div>
@@ -177,6 +181,7 @@ function App() {
           title="Вы уверены?"
           submitButton="Да"
         ></PopupWithForm>
+        <InfoTooltip onClose={closeAllPopups} />
       </div>
     </CurrentUserContext.Provider>
   );
