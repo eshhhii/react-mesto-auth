@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import headerLogo from "../images/logo.svg";
 
-function Header({ loggedIn, email }) {
+function Header({ loggedIn, currentEmail, handleSignOut }) {
   const pathname = window.location.pathname;
   const textToggle = `${pathname === "/sign-in" ? "Регистрация" : "Войти"}`;
   const linkToggle = `${pathname === "/sign-in" ? "/sign-up" : "/sign-in"}`;
@@ -13,8 +13,12 @@ function Header({ loggedIn, email }) {
       <div className="header__container">
         {loggedIn ? (
           <>
-            <p className="header__email">{email}</p>
-            <Link to="/sign-in" className="header__logout">
+            <p className="header__email">{currentEmail}</p>
+            <Link
+              to="/sign-in"
+              className="header__logout"
+              onClick={handleSignOut}
+            >
               Выйти
             </Link>
           </>

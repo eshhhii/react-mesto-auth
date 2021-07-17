@@ -29,7 +29,7 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
-  const [currentEmail, setCurrentEmail] = React.useState(false);
+  const [currentEmail, setCurrentEmail] = React.useState("");
   const [info, setInfo] = React.useState({ icon: "", text: "" });
   const history = useHistory();
 
@@ -212,6 +212,13 @@ function App() {
       });
   }
 
+  function handleSignOut() {
+    setLoggedIn(false);
+    localStorage.removeItem("jwt");
+    setCurrentEmail("");
+    history.push("/sign-in");
+  }
+
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
@@ -224,7 +231,11 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="body">
         <div className="page">
-          <Header loggedIn={loggedIn} email={currentEmail} />
+          <Header
+            loggedIn={loggedIn}
+            currentEmail={currentEmail}
+            onSignOut={handleSignOut}
+          />
           <Switch>
             <Route path="/sign-in">
               <Login
