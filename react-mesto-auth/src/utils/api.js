@@ -86,4 +86,5 @@ const api = new Api({
     "content-type": "application/json",
   },
 });
+
 export default api;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import api from "../utils/api.js";
 import Header from "./Header.js";
 import Main from "./Main.js";
@@ -14,6 +14,9 @@ import AddPlacePopup from "./AddPlacePopup.js";
 import ProtectedRoute from "./ProtectedRoute.js";
 import InfoTooltip from "./InfoTooltip.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
+import * as auth from "../utils/auth.js";
+import successIcon from "../images/success.png";
+import failIcon from "../images/fail.png";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -25,6 +28,10 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
+  const [currentEmail, setCurrentEmail] = React.useState(false);
+  const [info, setInfo] = React.useState({ icon: "", text: "" });
+  const history = useHistory();
 
   React.useEffect(() => {
     api
@@ -57,8 +64,14 @@ function App() {
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
+  function handleInfoTooltipOpen() {
+    setIsInfoTooltipOpen(true);
+  }
   function handleCardClick(card) {
     setSelectedCard(card);
+  }
+  function handleInfoTooltipContainer({ icon, text }) {
+    setInfo({ icon: icon, text: text });
   }
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -122,10 +135,44 @@ function App() {
       });
   }
 
+  function handleUserRegistration(email, password) {
+    auth
+      .register(email, password)
+      .then((res) => {
+        if (res.status === 201) {
+          handleInfoTooltipContainer({
+            icon: successIcon,
+            text: "Вы успешно зарегистрировались!",
+          });
+
+          handleInfoTooltipOpen();
+
+          setTimeout(history.push, 3500, "/sign-in");
+          setTimeout(closeAllPopups, 3000);
+        }
+
+        if (res.status === 400) {
+          console.log("Некорректно заполнено одно из полей!");
+        }
+      })
+      .catch((err) => {
+        handleInfoTooltipContainer({
+          icon: failIcon,
+          text: "Что-то пошло не так! Попробуйте ещё раз.",
+        });
+        handleInfoTooltipOpen();
+
+        // setTimeout(closeAllPopups, 3000);
+
+        console.log(err);
+      });
+  }
+
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setIsInfoTooltipOpen(false);
     setSelectedCard({});
   }
 
@@ -133,13 +180,21 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="body">
         <div className="page">
-          <Header loggedIn={loggedIn} />
+          <Header loggedIn={loggedIn} email={currentEmail} />
           <Switch>
             <Route path="/sign-in">
-              <Login />
+              <Login
+                onInfoTooltip={handleInfoTooltipOpen}
+                setLoggedIn={setLoggedIn}
+                setCurrentEmail={setCurrentEmail}
+              />
             </Route>
             <Route path="/sign-up">
-              <Register />
+              <Register
+                onInfoTooltip={handleInfoTooltipOpen}
+                onClose={closeAllPopups}
+                registration={handleUserRegistration}
+              />
             </Route>
             <ProtectedRoute
               path="/"
@@ -181,7 +236,11 @@ function App() {
           title="Вы уверены?"
           submitButton="Да"
         ></PopupWithForm>
-        <InfoTooltip onClose={closeAllPopups} />
+        <InfoTooltip
+          onClose={closeAllPopups}
+          isOpen={isInfoTooltipOpen}
+          info={info}
+        />
       </div>
     </CurrentUserContext.Provider>
   );

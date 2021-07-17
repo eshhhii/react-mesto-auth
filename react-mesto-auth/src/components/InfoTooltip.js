@@ -1,16 +1,12 @@
 import React from "react";
-import successIcon from "../images/succes.png";
-import failIcon from "../images/fail.png";
 
-function InfoTooltip({ onClose }) {
+function InfoTooltip({ onClose, isOpen, info }) {
   return (
-    <div className="popup popup_infotool">
+    <div className={`popup popup_infotool ${isOpen ? "popup_is-opened" : ""}`}>
       <div className="popup__container">
         <button type="button" className="popup__close" onClick={onClose} />
-        <img src={successIcon} alt="" className="popup__icon" />
-        <p className="popup__title-info">
-          сделать тернарный оператор для текста
-        </p>
+        <img src={info.icon} alt="" className="popup__icon" />
+        <p className="popup__title_tooltip">{info.text}</p>
       </div>
     </div>
   );

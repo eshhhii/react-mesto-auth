@@ -1,0 +1,11 @@
+.sign__container {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #ffffff;
+  font-style: normal;
+  font-weight: normal;
+  margin-top: 15px;
+}
