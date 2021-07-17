@@ -55,6 +55,20 @@ function App() {
       });
   }, []);
 
+  React.useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      auth
+        .checkToken(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          setCurrentEmail(res.data.email);
+          history.push("/");
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [history]);
+
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
@@ -162,7 +176,37 @@ function App() {
         });
         handleInfoTooltipOpen();
 
-        // setTimeout(closeAllPopups, 3000);
+        setTimeout(closeAllPopups, 3000);
+
+        console.log(err);
+      });
+  }
+
+  function handleUserAuthorization(email, password) {
+    auth
+      .authorize(email, password)
+      .then((res) => {
+        if (res.token) {
+          localStorage.setItem("jwt", res.token);
+          setLoggedIn(true);
+          setCurrentEmail(email);
+          handleInfoTooltipContainer({
+            icon: successIcon,
+            text: "Вы успешно авторизовались!",
+          });
+          handleInfoTooltipOpen();
+          setTimeout(history.push, 3500, "/");
+          setTimeout(closeAllPopups, 3000);
+        }
+      })
+      .catch((err) => {
+        handleInfoTooltipContainer({
+          icon: failIcon,
+          text: "Что-то пошло не так! Попробуйте ещё раз.",
+        });
+        handleInfoTooltipOpen();
+
+        setTimeout(closeAllPopups, 3000);
 
         console.log(err);
       });
@@ -187,13 +231,14 @@ function App() {
                 onInfoTooltip={handleInfoTooltipOpen}
                 setLoggedIn={setLoggedIn}
                 setCurrentEmail={setCurrentEmail}
+                onLogin={handleUserAuthorization}
               />
             </Route>
             <Route path="/sign-up">
               <Register
                 onInfoTooltip={handleInfoTooltipOpen}
                 onClose={closeAllPopups}
-                registration={handleUserRegistration}
+                onRegister={handleUserRegistration}
               />
             </Route>
             <ProtectedRoute

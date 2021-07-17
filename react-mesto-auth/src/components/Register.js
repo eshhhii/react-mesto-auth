@@ -2,7 +2,7 @@ import React from "react";
 import * as auth from "../utils/auth.js";
 import { Link } from "react-router-dom";
 
-function Register({ registration }) {
+function Register({ onRegister }) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
@@ -14,7 +14,7 @@ function Register({ registration }) {
   }
   function handleSubmit(e) {
     e.preventDefault();
-    registration(email, password);
+    onRegister(email, password);
   }
   return (
     <section className="sign">

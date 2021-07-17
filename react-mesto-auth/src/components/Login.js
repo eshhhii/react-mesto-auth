@@ -1,6 +1,6 @@
 import React from "react";
 
-function Login({}) {
+function Login({ onLogin }) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
@@ -12,6 +12,7 @@ function Login({}) {
   }
   function handleSubmit(e) {
     e.preventDefault();
+    onLogin(email, password);
   }
   return (
     <section className="sign">
