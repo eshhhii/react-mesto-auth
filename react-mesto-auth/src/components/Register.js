@@ -36,12 +36,9 @@ function Register({ onRegister }) {
         ></input>
         <button className="sign__button">Зарегистрироваться</button>
       </form>
-      <div className="sign__container">
-        <p className="sign__subtitle"> Уже Зарегистрированы?</p>
-        <Link className="sign__link" to="/sign-in">
-          {"Войти"}
-        </Link>
-      </div>
+      <Link className="sign__link" to="/sign-in">
+        Уже Зарегистрированы? Войти
+      </Link>
     </section>
   );
 }

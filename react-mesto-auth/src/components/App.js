@@ -153,19 +153,16 @@ function App() {
     auth
       .register(email, password)
       .then((res) => {
-        if (res.status === 201) {
+        if (res) {
           handleInfoTooltipContainer({
             icon: successIcon,
             text: "Вы успешно зарегистрировались!",
           });
-
           handleInfoTooltipOpen();
 
           setTimeout(history.push, 3500, "/sign-in");
           setTimeout(closeAllPopups, 3000);
-        }
-
-        if (res.status === 400) {
+        } else {
           console.log("Некорректно заполнено одно из полей!");
         }
       })
@@ -216,7 +213,7 @@ function App() {
     setLoggedIn(false);
     localStorage.removeItem("jwt");
     setCurrentEmail("");
-    history.push("/sign-in");
+    setTimeout(history.push, 3500, "/sign-in");
   }
 
   function closeAllPopups() {
@@ -229,75 +226,73 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="body">
-        <div className="page">
-          <Header
-            loggedIn={loggedIn}
-            currentEmail={currentEmail}
-            onSignOut={handleSignOut}
-          />
-          <Switch>
-            <Route path="/sign-in">
-              <Login
-                onInfoTooltip={handleInfoTooltipOpen}
-                setLoggedIn={setLoggedIn}
-                setCurrentEmail={setCurrentEmail}
-                onLogin={handleUserAuthorization}
-              />
-            </Route>
-            <Route path="/sign-up">
-              <Register
-                onInfoTooltip={handleInfoTooltipOpen}
-                onClose={closeAllPopups}
-                onRegister={handleUserRegistration}
-              />
-            </Route>
-            <ProtectedRoute
-              path="/"
-              loggedIn={loggedIn}
-              component={Main}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              cards={cards}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handCardDelete}
+      <div className="page">
+        <Header
+          loggedIn={loggedIn}
+          currentEmail={currentEmail}
+          onSignOut={handleSignOut}
+        />
+        <Switch>
+          <Route path="/sign-in">
+            <Login
+              onInfoTooltip={handleInfoTooltipOpen}
+              setLoggedIn={setLoggedIn}
+              setCurrentEmail={setCurrentEmail}
+              onLogin={handleUserAuthorization}
             />
-            <Route>
-              {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
-            </Route>
-            <Footer />
-          </Switch>
-        </div>
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-        />
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-
-        <PopupWithForm
-          name="delete"
-          title="Вы уверены?"
-          submitButton="Да"
-        ></PopupWithForm>
-        <InfoTooltip
-          onClose={closeAllPopups}
-          isOpen={isInfoTooltipOpen}
-          info={info}
-        />
+          </Route>
+          <Route path="/sign-up">
+            <Register
+              onInfoTooltip={handleInfoTooltipOpen}
+              onClose={closeAllPopups}
+              onRegister={handleUserRegistration}
+            />
+          </Route>
+          <ProtectedRoute
+            path="/"
+            loggedIn={loggedIn}
+            component={Main}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            cards={cards}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handCardDelete}
+          />
+          <Route>
+            {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+          </Route>
+        </Switch>
+        <Footer />
       </div>
+      <EditProfilePopup
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
+      />
+      <AddPlacePopup
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
+        onAddPlace={handleAddPlaceSubmit}
+      />
+      <EditAvatarPopup
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+      />
+      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
+      <PopupWithForm
+        name="delete"
+        title="Вы уверены?"
+        submitButton="Да"
+      ></PopupWithForm>
+      <InfoTooltip
+        onClose={closeAllPopups}
+        isOpen={isInfoTooltipOpen}
+        info={info}
+      />
     </CurrentUserContext.Provider>
   );
 }

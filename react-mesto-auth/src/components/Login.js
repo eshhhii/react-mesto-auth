@@ -33,7 +33,6 @@ function Login({ onLogin }) {
           value={password}
           onChange={handleChangePassword}
         ></input>
-
         <button className="sign__button" type="submit">
           Войти
         </button>
