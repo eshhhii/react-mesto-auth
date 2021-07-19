@@ -3,23 +3,22 @@ class Api {
     this._url = config.url;
     this._headers = config.headers;
   }
+  _checkResponse(res) {
+    return res.ok ? res.json() : Promise.reject(`Ошибка! ${res.status}`);
+  }
 
   getInitialCards() {
     return fetch(`${this._url}/cards`, {
       method: "GET",
       headers: this._headers,
-    }).then((res) => {
-      return res.ok ? res.json() : Promise.reject(`Ошибка! ${res.status}`);
-    });
+    }).then(this._checkResponse);
   }
 
   getUserInfo() {
     return fetch(`${this._url}/users/me`, {
       method: "GET",
       headers: this._headers,
-    }).then((res) => {
-      return res.ok ? res.json() : Promise.reject(`Ошибка! ${res.status}`);
-    });
+    }).then(this._checkResponse);
   }
 
   editUserInfo(name, about) {
@@ -30,9 +29,7 @@ class Api {
         name: name,
         about: about,
       }),
-    }).then((res) => {
-      return res.ok ? res.json() : Promise.reject(`Ошибка! ${res.status}`);
-    });
+    }).then(this._checkResponse);
   }
 
   editUserAvatar(url) {
@@ -42,9 +39,7 @@ class Api {
       body: JSON.stringify({
         avatar: url,
       }),
-    }).then((res) => {
-      return res.ok ? res.json() : Promise.reject(`Ошибка! ${res.status}`);
-    });
+    }).then(this._checkResponse);
   }
 
   addCard(name, link) {
@@ -55,27 +50,21 @@ class Api {
         name: name,
         link: link,
       }),
-    }).then((res) => {
-      return res.ok ? res.json() : Promise.reject(`Ошибка! ${res.status}`);
-    });
+    }).then(this._checkResponse);
   }
 
   deleteCard(id) {
     return fetch(`${this._url}/cards/${id}`, {
       method: "DELETE",
       headers: this._headers,
-    }).then((res) => {
-      return res.ok ? res.json() : Promise.reject(`Ошибка! ${res.status}`);
-    });
+    }).then(this._checkResponse);
   }
 
   changeLikeCardStatus(id, isLiked) {
     return fetch(`${this._url}/cards/likes/${id}`, {
       method: isLiked ? "PUT" : "DELETE",
       headers: this._headers,
-    }).then((res) => {
-      return res.ok ? res.json() : Promise.reject(`Ошибка! ${res.status}`);
-    });
+    }).then(this._checkResponse);
   }
 }
 

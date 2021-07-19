@@ -2,15 +2,27 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm.js";
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
-  const nameRef = React.useRef();
-  const linkRef = React.useRef();
+  const [placeName, setPlaceName] = React.useState("");
+  const [placeLink, setPlaceLink] = React.useState("");
+
+  function handleChangePlaceName(e) {
+    setPlaceName(e.target.value);
+  }
+  function handleChangePlaceLink(e) {
+    setPlaceLink(e.target.value);
+  }
+
+  React.useEffect(() => {
+    setPlaceName("");
+    setPlaceLink("");
+  }, [isOpen]);
 
   function handleSubmit(e) {
     e.preventDefault();
 
     onAddPlace({
-      name: nameRef.current.value,
-      link: linkRef.current.value,
+      name: placeName,
+      link: placeLink,
     });
   }
 
@@ -24,18 +36,20 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       handleSubmit={handleSubmit}
     >
       <input
-        ref={nameRef}
+        onChange={handleChangePlaceName}
         className="popup__input"
         id="placeName"
         name="name"
         type="text"
         placeholder="Название"
+        value={placeName}
         minLength="2"
         maxLength="30"
       />
       <span className="popup__error" id="placeName-error"></span>
       <input
-        ref={linkRef}
+        onChange={handleChangePlaceLink}
+        value={placeLink}
         className="popup__input"
         id="placeLink"
         name="link"
