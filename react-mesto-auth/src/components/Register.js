@@ -1,5 +1,4 @@
 import React from "react";
-import * as auth from "../utils/auth.js";
 import { Link } from "react-router-dom";
 
 function Register({ onRegister }) {

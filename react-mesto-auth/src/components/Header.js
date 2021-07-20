@@ -1,9 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import headerLogo from "../images/logo.svg";
 
 function Header({ loggedIn, currentEmail, onSignOut }) {
-  const pathname = window.location.pathname;
+  const { pathname } = useLocation();
   const textToggle = `${pathname === "/sign-in" ? "Регистрация" : "Войти"}`;
   const linkToggle = `${pathname === "/sign-in" ? "/sign-up" : "/sign-in"}`;
 
@@ -23,7 +23,7 @@ function Header({ loggedIn, currentEmail, onSignOut }) {
             </Link>
           </>
         ) : (
-          <Link className="header__link" to={linkToggle}>
+          <Link to={linkToggle} className="header__link">
             {textToggle}
           </Link>
         )}
